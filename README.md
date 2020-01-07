@@ -35,9 +35,9 @@
 	P:Prediction
 	O:Outcome
 	G:Guess
-	![image](https://github.com/sam34andy/2-Bit_History_Branch_Predictor/blob/master/hw1_example_output1.JPG)
+![image](https://github.com/sam34andy/2-Bit_History_Branch_Predictor/blob/master/hw1_example_output1.JPG)
 	
 	2.包含個別entry他們執行prediction的結果與最終這個entry所遇上的misprediction次數。
-	![image](https://github.com/sam34andy/2-Bit_History_Branch_Predictor/blob/master/hw1_example_output2.JPG)
+![image](https://github.com/sam34andy/2-Bit_History_Branch_Predictor/blob/master/hw1_example_output2.JPG)
 	
 	

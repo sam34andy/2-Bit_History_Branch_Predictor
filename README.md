@@ -47,42 +47,42 @@
 ![image](https://github.com/sam34andy/2-Bit_History_Branch_Predictor/blob/master/hw1_example_output2.JPG)
 	
 ### 程式碼內容:
-struct TBH {
-	int history[2];
-	int CNT[4];
-	int mis_pre;
-	vector<string> h; // hsitory;
-}; // TBH is Two Bit History. // SN-0, WN-1, WT-2, ST-3
+	struct TBH {
+		int history[2];
+		int CNT[4];
+		int mis_pre;
+		vector<string> h; // hsitory;
+	}; // TBH is Two Bit History. // SN-0, WN-1, WT-2, ST-3
 
-struct Register { 
-	int counter;
-	int value;
-}; // Register
+	struct Register { 
+		int counter;
+		int value;
+	}; // Register
 
-struct Instruction{
-	string addr;
-	string Type;
-	int D_Reg;
-	int InputA_Reg;
-	int InputB_Reg;
-	int immed; // immediate number
-	string D_Addr;
-}; // instruction存在程式碼中的樣子
+	struct Instruction{
+		string addr;
+		string Type;
+		int D_Reg;
+		int InputA_Reg;
+		int InputB_Reg;
+		int immed; // immediate number
+		string D_Addr;
+	}; // instruction存在程式碼中的樣子
 
-struct Jump_Addr {
-	string addr;
-	int inst_number;
-}; // 要jump/branch的位置與他們的PC
+	struct Jump_Addr {
+		string addr;
+		int inst_number;
+	}; // 要jump/branch的位置與他們的PC
 
-vector<string>Inst_history;
-vector<TBH>Tbh;
-vector<int>Reg;
-vector<Instruction>Inst;
-vector<Jump_Addr>jump_addr;
+	vector<string>Inst_history;
+	vector<TBH>Tbh;
+	vector<int>Reg;
+	vector<Instruction>Inst;
+	vector<Jump_Addr>jump_addr;
 
-void string_cut(string, int); // 進行字串切割
-void Data_Saving(string, int, int); // 進行字符判別
-void Calculating_Assembly(int); // 對instruction做計算
-int Find_matching_addr(string); // Branch發生時跳到指定的位置
-void TBH_predict(int, int, char); // 2-Bit History branch Predoction主要執行區
+	void string_cut(string, int); // 進行字串切割
+	void Data_Saving(string, int, int); // 進行字符判別
+	void Calculating_Assembly(int); // 對instruction做計算
+	int Find_matching_addr(string); // Branch發生時跳到指定的位置
+	void TBH_predict(int, int, char); // 2-Bit History branch Predoction主要執行區
 

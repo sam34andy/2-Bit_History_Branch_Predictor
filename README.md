@@ -3,7 +3,7 @@
 
 題目: 2-Bit History Branch Prediction 
 要求:
-	1.讀取一個序列的PC與instruction
+	1.讀取一個序列的PC與instruction\n
 	2.可以設定predictor的entry數量
 
 使用語言: C++

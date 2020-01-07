@@ -2,11 +2,17 @@
 2019 Data Structure Course Homework One
 
 ### 題目: 2-Bit History Branch Prediction 
+
 ### 要求:
 	1.讀取一個序列的PC與instruction\n
 	2.可以設定predictor的entry數量
 
 ### 使用語言: C++
+
+### 編譯方式:
+	1.使用Dev-C++、Visual Studio等程式完成編譯
+	2.linux "g++ hw1_upgrade.cpp ASSEMBLY.txt -o hw1"
+	
 ### 範例input(using txt file "ASSEMBLY.txt"):
 
 	0x110	li R2,0
@@ -40,4 +46,43 @@
 	2.包含個別entry他們執行prediction的結果與最終這個entry所遇上的misprediction次數。
 ![image](https://github.com/sam34andy/2-Bit_History_Branch_Predictor/blob/master/hw1_example_output2.JPG)
 	
-	
+### 程式碼內容:
+struct TBH {
+	int history[2];
+	int CNT[4];
+	int mis_pre;
+	vector<string> h; // hsitory;
+}; // TBH is Two Bit History. // SN-0, WN-1, WT-2, ST-3
+
+struct Register { 
+	int counter;
+	int value;
+}; // Register
+
+struct Instruction{
+	string addr;
+	string Type;
+	int D_Reg;
+	int InputA_Reg;
+	int InputB_Reg;
+	int immed; // immediate number
+	string D_Addr;
+}; // instruction存在程式碼中的樣子
+
+struct Jump_Addr {
+	string addr;
+	int inst_number;
+}; // 要jump/branch的位置與他們的PC
+
+vector<string>Inst_history;
+vector<TBH>Tbh;
+vector<int>Reg;
+vector<Instruction>Inst;
+vector<Jump_Addr>jump_addr;
+
+void string_cut(string, int); // 進行字串切割
+void Data_Saving(string, int, int); // 進行字符判別
+void Calculating_Assembly(int); // 對instruction做計算
+int Find_matching_addr(string); // Branch發生時跳到指定的位置
+void TBH_predict(int, int, char); // 2-Bit History branch Predoction主要執行區
+

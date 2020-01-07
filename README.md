@@ -9,6 +9,7 @@
 ### 使用語言: C++
 ### 範例input(using txt file "ASSEMBLY.txt"):
 
+![image](https://github.com/sam34andy/2-Bit_History_Branch_Predictor/blob/master/hw1_example_input.JPG)
 
 
 

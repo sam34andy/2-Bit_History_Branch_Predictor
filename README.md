@@ -85,4 +85,8 @@
 	void Calculating_Assembly(int); // 對instruction做計算
 	int Find_matching_addr(string); // Branch發生時跳到指定的位置
 	void TBH_predict(int, int, char); // 2-Bit History branch Predoction主要執行區
+	
+Calculating_Assembly
+	-> (如果當前指令為加法或減法)TBH_predict
+	-> (如果當前指令為branch或jump)Find_matching_addr + TBH_predict
 

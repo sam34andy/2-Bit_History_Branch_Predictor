@@ -1,7 +1,3 @@
-// h1_UPGRADE.cpp : ¦¹ÀÉ®×¥]§t 'main' ¨ç¦¡¡Cµ{¦¡·|©ó¸Ó³B¶}©l°õ¦æ¤Îµ²§ô°õ¦æ¡C
-//
-
-
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -17,11 +13,6 @@ struct TBH {
 	vector<string> h; // hsitory;
 }; // TBH is Two Bit History. // SN-0, WN-1, WT-2, ST-3
 
-struct Register {
-	int counter;
-	int value;
-};
-
 struct Instruction{
 	string addr;
 	string Type;
@@ -29,7 +20,7 @@ struct Instruction{
 	int InputA_Reg;
 	int InputB_Reg;
 	int immed; // immediate number
-	string D_Addr; // ­n¸õ¥h­ş¸Ì¡A³o­ÓªºÀx¦sªkÁÙ­n·Ğ´o
+	string D_Addr; // è¦è·³å»å“ªè£¡ï¼Œé€™å€‹çš„å„²å­˜æ³•é‚„è¦ç…©æƒ±
 }; // 
 
 struct Jump_Addr {
@@ -43,19 +34,19 @@ vector<int>Reg;
 vector<Instruction>Inst;
 vector<Jump_Addr>jump_addr;
 
-void string_cut(string, int); // ¶i¦æ¦r¦ê¤Á³Î
-void Data_Saving(string, int, int); // ¶i¦æ¦r²Å§P§O
+void string_cut(string, int); // é€²è¡Œå­—ä¸²åˆ‡å‰²
+void Data_Saving(string, int, int); // é€²è¡Œå­—ç¬¦åˆ¤åˆ¥
 void Calculating_Assembly(int);
 int Find_matching_addr(string);
 void TBH_predict(int, int, char);
 
 int main()
 {
-	// ªì©l¤Æ20­ÓRegister
+	// åˆå§‹åŒ–20å€‹Register
 	for (int i = 0; i < 20; i++)
 		Reg.push_back(0);
 
-	// ¨M©wentryªº­Ó¼Æ¨Ãªì©l¤Æ
+	// æ±ºå®šentryçš„å€‹æ•¸ä¸¦åˆå§‹åŒ–
 	int entry_number = 0;
 	cout << "Please input the entry number: ";
 	cin >> entry_number;
@@ -63,12 +54,12 @@ int main()
 	for (int i = 0; i < entry_number; i++)
 		Tbh.push_back(initial);
 
-	// ¤å¥»Åª¨ú»P¥á¦r¦ê³B²z
+	// æ–‡æœ¬è®€å–èˆ‡ä¸Ÿå­—ä¸²è™•ç†
 	int inst_counter = 0;
 	string content;
 	ifstream myfile("ASSEMBLY.txt"); // ifstream myfile("ASSEMBLY_Test.txt");
 	if (myfile.is_open())
-		while (getline(myfile, content)) // ¥i¥H¤@¦¸Åª¤@¦æ
+		while (getline(myfile, content)) // å¯ä»¥ä¸€æ¬¡è®€ä¸€è¡Œ
 		{		 
 			Inst_history.push_back(content);
 			string_cut(content, inst_counter);
@@ -80,8 +71,7 @@ int main()
 	// Print out all the enrty histories
 	int sum_misprediction = 0;
 	cout << endl << endl << endl;
-	for (int i = 0; i < Tbh.size(); i++)
-	{
+	for (int i = 0; i < Tbh.size(); i++){
 		cout << "Entry number: " << (i + 1) << endl;
 		for (int j = 0; j < Tbh[i].h.size(); j++)
 			cout << Tbh[i].h[j] << endl;
@@ -94,7 +84,7 @@ int main()
 	system("pause");
 }
 
-void string_cut(string content, int inst_n) // ¶i¦æ¦r¦ê³B²z
+void string_cut(string content, int inst_n) // é€²è¡Œå­—ä¸²è™•ç†
 {
 	Instruction inst = { "", "", -1, -1, -1, NULL, "" };
 	Inst.push_back(inst);
@@ -102,9 +92,8 @@ void string_cut(string content, int inst_n) // ¶i¦æ¦r¦ê³B²z
 	// cout << "Hello World!\n";
 	string extract = "";
 
-	// ºI¥X¤@¬q¤å¦r
-	while (true)
-	{
+	// æˆªå‡ºä¸€æ®µæ–‡å­—
+	while (true){
 		int start = content.find_first_not_of(" \t,:"); //cout << start << "\t";
 		int end = content.find_first_of(" \t,:\n"); //cout << end << "\t";
 		extract = content.substr(0, end);
@@ -112,10 +101,10 @@ void string_cut(string content, int inst_n) // ¶i¦æ¦r¦ê³B²z
 		if (end == -1)
 			return;
 
-		//¹ï¦r¦ê°µ¾ã²z
+		//å°å­—ä¸²åšæ•´ç†
 		content = content.substr(end, content.length() - extract.length());
 		int split_n = content.find_first_not_of("\t, :");
-		if (split_n == string::npos) // ¦pªG¤w¸g¨ì¦r¦ê§À¤Ú´N¸õ¥X
+		if (split_n == string::npos) // å¦‚æœå·²ç¶“åˆ°å­—ä¸²å°¾å·´å°±è·³å‡º
 			return;
 		content = content.substr(split_n, content.length() - split_n + 1);
 		//cout << "." << content << endl;
@@ -126,14 +115,13 @@ void Data_Saving(string s, int inst, int rest_n)
 {
 	// cout << "\t";
 
-	if (s.find("0x") != string::npos)
-	{
+	if (s.find("0x") != string::npos){
 		Inst[inst].addr = s;
 		// cout << Inst[inst].addr;
 		return;
 	}
 
-	if ((s.find("Loop") != string::npos) || (s.find("End") != string::npos)) // ¦pªGType¬°ªÅ¡A´N¬O¤@­Ó¸õÅDÂI
+	if ((s.find("Loop") != string::npos) || (s.find("End") != string::npos)) // å¦‚æœTypeç‚ºç©ºï¼Œå°±æ˜¯ä¸€å€‹è·³èºé»
 	{
 		Inst[inst].D_Addr = s; 
 		if (Inst[inst].Type != "")
@@ -143,25 +131,21 @@ void Data_Saving(string s, int inst, int rest_n)
 		return;
 	}
 
-	stringstream geek(s); // ¨ú¥Ximmediate
+	stringstream geek(s); // å–å‡ºimmediate
 	int x;
-	if (geek >> x)
-	{
+	if (geek >> x){
 		Inst[inst].immed = x;
 		return;
 	}
 
-	if (s.find("R") != string::npos)
-	{
+	if (s.find("R") != string::npos){
 		s = s.substr(1, s.length() - 1);
 
-		if (Inst[inst].D_Reg == -1)
-		{
+		if (Inst[inst].D_Reg == -1){
 			Inst[inst].D_Reg = stoi(s);
 			return;
 		}
-		if (Inst[inst].InputA_Reg == -1)
-		{
+		if (Inst[inst].InputA_Reg == -1){
 			Inst[inst].InputA_Reg = stoi(s);
 			return;
 		}
@@ -170,8 +154,7 @@ void Data_Saving(string s, int inst, int rest_n)
 		return;
 	}
 
-	if (s.find("j") != string::npos)
-	{
+	if (s.find("j") != string::npos){
 		Inst[inst].Type = s;
 		return;
 	}
@@ -181,98 +164,82 @@ void Data_Saving(string s, int inst, int rest_n)
 	return;
 }
 
-void Calculating_Assembly(int entry_counter) {
+void Calculating_Assembly(int entry_counter) 
+{
 	int working = 0;
 	int entry = -1;
 
-	while (working < Inst.size())
-	{
+	while (working < Inst.size()){
 		entry++;
 		entry = (entry >= entry_counter) ? 0 : entry;
-
-		// Inst_print(working);
-		// cout << Inst_history[working] << "\t";
-		if (Inst[working].Type == "li") 
-		{
+		if (Inst[working].Type == "li") {
 			Reg[Inst[working].D_Reg] = Inst[working].immed;
 			TBH_predict(working, entry, 'N');
 			working++;
 			continue;
 		}
 
-		if (Inst[working].Type == "add")
-		{
+		if (Inst[working].Type == "add"){
 			Reg[Inst[working].D_Reg] = Reg[Inst[working].InputA_Reg] + Reg[Inst[working].InputB_Reg];
 			TBH_predict(working, entry, 'N');
 			working++;
 			continue;
 		}
 
-		if (Inst[working].Type == "addi")
-		{
+		if (Inst[working].Type == "addi"){
 			Reg[Inst[working].D_Reg] = Reg[Inst[working].InputA_Reg] + Inst[working].immed;
 			TBH_predict(working, entry, 'N');
 			working++;
 			continue;
 		}
 
-		if (Inst[working].Type == "sub")
-		{
+		if (Inst[working].Type == "sub"){
 			Reg[Inst[working].D_Reg] = Reg[Inst[working].InputA_Reg] - Reg[Inst[working].InputB_Reg];
 			TBH_predict(working, entry, 'N');
 			working++;
 			continue;
 		}
 
-		if (Inst[working].Type == "subi")
-		{
+		if (Inst[working].Type == "subi"){
 			Reg[Inst[working].D_Reg] = Reg[Inst[working].InputA_Reg] - Inst[working].immed; // cout << "R1: " << Reg[1] << "\tR2: " << Reg[2] << endl;
 			TBH_predict(working, entry, 'N');
 			working++;
 			continue;
 		}
 
-		if (Inst[working].Type == "beq")
-		{
-			if (Reg[Inst[working].D_Reg] == Reg[Inst[working].InputA_Reg])
-			{
+		if (Inst[working].Type == "beq"){
+			if (Reg[Inst[working].D_Reg] == Reg[Inst[working].InputA_Reg]){
 				TBH_predict(working, entry, 'T');
 				working = Find_matching_addr(Inst[working].D_Addr);
 				continue;
 			}
-			else
-			{
+			else{
 				TBH_predict(working, entry, 'N');
 				working++;
 				continue;
 			}
 		}
 
-		if (Inst[working].Type == "bne")
-		{
-			if (Reg[Inst[working].D_Reg] != Reg[Inst[working].InputA_Reg])
-			{
+		if (Inst[working].Type == "bne"){
+			if (Reg[Inst[working].D_Reg] != Reg[Inst[working].InputA_Reg]){
 				TBH_predict(working, entry, 'T');
 				working = Find_matching_addr(Inst[working].D_Addr);
 				continue;
 			}
-			else
-			{
+			else{
 				TBH_predict(working, entry, 'N');
 				working++;
 				continue;
 			}
 		}
 
-		if (Inst[working].Type == "j")
-		{
+		if (Inst[working].Type == "j"){
 			TBH_predict(working, entry, 'T');
 			working = Find_matching_addr(Inst[working].D_Addr);
 			continue;
 		}
 
-		if (Inst[working].Type == "")
-		{
+		if (Inst[working].Type == ""){
 			working++;
 			entry--;
 			continue;
@@ -282,8 +249,7 @@ void Calculating_Assembly(int entry_counter) {
 
 int Find_matching_addr(string addr)
 {
-	for (int i = 0; i < jump_addr.size(); i++)
-	{
+	for (int i = 0; i < jump_addr.size(); i++){
 		if (jump_addr[i].addr == addr)
 			return jump_addr[i].inst_number;
 	}
@@ -291,27 +257,27 @@ int Find_matching_addr(string addr)
 
 void TBH_predict(int instruction_number, int entry, char outcome)
 {
-	// ®Ú¾Úhistory°µ¥Xpredict
+	// æ ¹æ“šhistoryåšå‡ºpredict
 	int current_h = Tbh[entry].history[0] * 2 + Tbh[entry].history[1];
 	char predict = (Tbh[entry].CNT[current_h] >= 2) ? 'T' : 'N';
 
-	// ®Ú¾Úpredict»P¿é¤Jªºoutcome§PÂ_¦³¨S¦³¹w´ú¥¿½T
+	// æ ¹æ“špredictèˆ‡è¼¸å…¥çš„outcomeåˆ¤æ–·æœ‰æ²’æœ‰é æ¸¬æ­£ç¢º
 	bool guess = (outcome == predict) ? true : false;
 	if (guess == false)
 		Tbh[entry].mis_pre++;
 
-	// §ó·sHistoryªº­È
+	// æ›´æ–°Historyçš„å€¼
 	Tbh[entry].history[0] = Tbh[entry].history[1];
 	Tbh[entry].history[1] = (outcome == 'T') ? 1 : 0;
 
-	// ®Ú¾Úoutcome§ïÅÜ§Ú­ÌªºTwo Bit History
+	// æ ¹æ“šoutcomeæ”¹è®Šæˆ‘å€‘çš„Two Bit History
 	if (outcome == 'T')
 		(Tbh[entry].CNT[current_h])++;
 	if (outcome == 'N')
 		(Tbh[entry].CNT[current_h])--;
 		
 
-	// Åv­«­×¥¿
+	// æ¬Šé‡ä¿®æ­£
 	if (Tbh[entry].CNT[current_h] > 3)
 		Tbh[entry].CNT[current_h] = 3;
 	if (Tbh[entry].CNT[current_h] < 0)
@@ -322,8 +288,7 @@ void TBH_predict(int instruction_number, int entry, char outcome)
 	cout << "Entry No." << (entry + 1);
 	cout << "\t";
 	tbh_result = "(" + to_string(Tbh[entry].history[0]) + to_string(Tbh[entry].history[1]);
-	for (int i = 0; i < 4; i++)
-	{
+	for (int i = 0; i < 4; i++){
 		tbh_result = tbh_result + ",";		
 		switch (Tbh[entry].CNT[i]) {
 		case 0:
@@ -346,41 +311,10 @@ void TBH_predict(int instruction_number, int entry, char outcome)
 
 	Tbh[entry].h.push_back(tbh_result +"\t"+ Inst_history[instruction_number]);
 
-	//cout << "TBH entry No." << (entry+1);
-	//cout << "\t(" << Tbh[entry].history[0] << Tbh[entry].history[1];
-	//for (int i = 0; i < 4; i++)
-	//{
-	//	
-	//	// 
-	//	cout << ", ";
-	//	switch (Tbh[entry].CNT[i]) {
-	//	case 0:
-	//		cout << "SN";
-	//		break;
-	//	case 1:
-	//		cout << "WN";
-	//		break;
-	//	case 2:
-	//		cout << "WT";
-	//		break;
-	//	case 3:
-	//		cout << "ST";
-	//		break;
-	//	}
-	//}
-	//cout << ")" << "\tP:" << predict << "\tO:" << outcome << "\tG:" << guess << "\t";
-	//cout << Inst_history[instruction_number] << endl;
+
 }
 
-// 0.½T©w¥i¥HÅª¨ú¤å¥»¡A³v¦æÅª¨ú -> OK
-// 1.½T©w¥i¥HÅª¨ú²Õ¦X»y¨¥ªº¤å¥» -> OK
-// 2.½T©w¥i¥H¤ÀªR¥X­n°µ­ş¨Ç¨Æ¡ABranchµ¥µ¥ ->
-// 3.½T©w¥i¥Hª¾¹D­n¨Ï¥Î­ş­ÓRegister ->
-// 4.½T»{end of file«á¡A°õ¦æµ{¦¡->
-// 5.½T»{°õ¦æªº¥¿½T©Ê->
-// 6.¥¿½T¦L¥X¸ê®Æ
-
-// ¡i¦n¥ÎªºªF¦è¡j
+// ã€å¥½ç”¨çš„æ±è¥¿ã€‘
 //string delimiter = " ";
 //size_t pos;
 //std::string token;
@@ -390,16 +324,3 @@ void TBH_predict(int instruction_number, int entry, char outcome)
 //	content.erase(0, pos + delimiter.length());
 //}
 //cout << endl;
-
-// void Inst_print(int);
-//void Inst_print(int working)
-//{
-//	cout << "[" << working << "]\t";
-//	cout << Inst[working].addr << " "
-//		<< Inst[working].Type << " "
-//		<< Inst[working].D_Reg << " "
-//		<< Inst[working].InputA_Reg << " "
-//		<< Inst[working].InputB_Reg << " "
-//		<< Inst[working].immed << " "
-//		<< Inst[working].D_Addr << endl;
-//}

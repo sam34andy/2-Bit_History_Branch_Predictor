@@ -54,11 +54,6 @@
 		vector<string> h; // hsitory;
 	}; // TBH is Two Bit History. // SN-0, WN-1, WT-2, ST-3
 
-	struct Register { 
-		int counter;
-		int value;
-	}; // Register
-
 	struct Instruction{
 		string addr;
 		string Type;
@@ -86,7 +81,29 @@
 	int Find_matching_addr(string); // Branch發生時跳到指定的位置
 	void TBH_predict(int, int, char); // 2-Bit History branch Predoction主要執行區
 	
-Calculating_Assembly
-	-> (如果當前指令為加法或減法)TBH_predict
-	-> (如果當前指令為branch或jump)Find_matching_addr + TBH_predict
-
+### 資料儲存形態與內容:
+	Inst_history:將所有instruction以string的方式做儲存。一條instruction占vector一個[i]的位置。
+	Tbh:一個entry占vector一個[i]的位置。包含所有2-bit history predictor。
+	Reg:儲存Register的資料。一條Register占vector一個[i]的位置。
+	Inst:每條instruction存在程式碼中的樣子，包含著對應的資料型態。一條instruction占vector一個[i]的位置。
+	jump_addr:儲存所有可能branch或是jump到的標籤位置。一條標籤占vector一個[i]的位置。
+	
+### 程式碼呼叫順序與函式執行內容:
+	main  // input predictor的entry數量
+		-> string_cut // 將每行instruction中的資料，一個個有意義的文字切割出來
+			-> Data_Saving // 將string_cut中切割好的資料丟到Data_Saving中進行對應資料型態的儲存。
+		-> Calculating_Assembly
+			-> (指令為加法或減法)TBH_predict
+			-> (指令為branch或jump)Find_matching_addr(找到要跳過去的對應instruction內容) + TBH_predict
+			
+	TBH_predict執行內容(按順序):
+		1.根據history做出predict
+		2.根據predict與輸入的outcome判斷有沒有預測正確
+		3.更新History的值
+		4.根據outcome改變我們的Two Bit History
+		5.權重修正(*)
+		6.將更新的predictor內容以string方式進行儲存，方便後續的輸出。
+		
+	*權重:
+		SN, WN, WT, ST分別對應權重0, 1, 2, 3。如果outcome為True，則會對entry相對應的位置的紀錄進行權重+1。如果outcome為False，則會對	entry相對應的位置的紀錄進行權重-1。
+		
